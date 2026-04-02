@@ -32,3 +32,15 @@ val Typography = Typography(
     )
     */
 )
+
+val StockSymbolStyle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+)
+
+val StockChangeStyle = TextStyle(
+    fontFamily = FontFamily.Serif,
+    fontWeight = FontWeight.Bold,
+    fontSize = 12.sp,
+)

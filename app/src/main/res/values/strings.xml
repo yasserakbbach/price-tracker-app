@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Price Tracker App</string>
+    <string name="available_stocks">Available stocks</string>
 </resources>
