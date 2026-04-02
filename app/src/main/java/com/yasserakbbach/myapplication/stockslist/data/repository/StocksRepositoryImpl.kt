@@ -29,4 +29,7 @@ class StocksRepositoryImpl @Inject constructor(
     override fun stopFeed() {
         stocksWebsocketSource.disconnect()
     }
+
+    override fun findStockBySymbol(symbol: String): Flow<Stock?> =
+        stocksWebsocketSource.findStockBySymbol(symbol)
 }

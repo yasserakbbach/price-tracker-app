@@ -50,3 +50,10 @@ val ConnectivityStatusStyle = TextStyle(
     fontWeight = FontWeight.SemiBold,
     fontSize = 14.sp,
 )
+
+val StockDescriptionStyle = TextStyle(
+    fontFamily = FontFamily.Serif,
+    fontWeight = FontWeight.Medium,
+    fontSize = 14.sp,
+    lineHeight = 28.sp,
+)

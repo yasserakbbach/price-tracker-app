@@ -10,14 +10,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object StocksListRoute
 
-fun NavGraphBuilder.stocksListRoute() {
+fun NavGraphBuilder.stocksListRoute(
+    navigateToStockDetails: (symbol: String) -> Unit,
+) {
     composable<StocksListRoute> {
         val viewModel = hiltViewModel<StocksListViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         StocksListScreen(state = state) { event ->
             when (event) {
-                is StocksListEvent.OnStockClick -> Unit // TODO navigate to stock details
+                is StocksListEvent.OnStockClick -> navigateToStockDetails(event.stock.symbol)
                 is StocksListEvent.OnToggleConnectivity -> viewModel.toggleConnectivity(event.isConnected)
             }
         }

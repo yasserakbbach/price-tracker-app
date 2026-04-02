@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 data class Stock(
     val symbol: String,
     val openPrice: Double,
-    val currentPrice: Double,
     val change: Double,
     val changePercent: Double,
 ) {

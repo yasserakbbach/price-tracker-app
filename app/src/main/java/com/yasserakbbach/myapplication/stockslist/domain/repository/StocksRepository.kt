@@ -10,4 +10,5 @@ interface StocksRepository {
 
     fun startFeed()
     fun stopFeed()
+    fun findStockBySymbol(symbol: String): Flow<Stock?>
 }

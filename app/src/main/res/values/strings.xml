@@ -3,4 +3,5 @@
     <string name="available_stocks">Available stocks</string>
     <string name="connected">Connected</string>
     <string name="disconnected">Disconnected</string>
+    <string name="error_loading_stock">Error occurred while fetching stock details!</string>
 </resources>

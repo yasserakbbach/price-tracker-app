@@ -90,7 +90,6 @@ private fun StockItemPreview() {
         stock = Stock(
             symbol = "GOOGL",
             openPrice = 294.00,
-            currentPrice = 294.00,
             change = 0.0,
             changePercent = 1.0,
         ),

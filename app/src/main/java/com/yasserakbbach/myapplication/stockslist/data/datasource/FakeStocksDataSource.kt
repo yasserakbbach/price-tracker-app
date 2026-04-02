@@ -42,7 +42,6 @@ class FakeStocksDataSource @Inject constructor() {
         return Stock(
             symbol = symbol,
             openPrice = openPrice,
-            currentPrice = currentPrice,
             change = change,
             changePercent = changePercentage,
         )

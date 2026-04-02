@@ -5,10 +5,15 @@ import com.yasserakbbach.myapplication.stockslist.data.di.ApplicationScope
 import com.yasserakbbach.myapplication.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.myapplication.stockslist.domain.model.Stock
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -100,4 +105,10 @@ class StocksWebsocketSource @Inject constructor(
         _event.trySend(SocketStatus.Disconnected)
         webSocket = null
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun findStockBySymbol(symbol: String): Flow<Stock?> =
+        stocks.flatMapConcat { it.asFlow() }
+            .filter { stock -> stock.symbol == symbol }
+
 }

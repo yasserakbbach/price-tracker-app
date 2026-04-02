@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.yasserakbbach.myapplication.stockdetails.ui.StockDetailsRoute
+import com.yasserakbbach.myapplication.stockdetails.ui.stockDetailsRoute
 import com.yasserakbbach.myapplication.stockslist.ui.StocksListRoute
 import com.yasserakbbach.myapplication.stockslist.ui.stocksListRoute
 import com.yasserakbbach.myapplication.ui.theme.PriceTrackerAppTheme
@@ -24,7 +26,12 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = StocksListRoute,
                 ) {
-                    stocksListRoute()
+                    stocksListRoute(
+                        navigateToStockDetails = { symbol ->
+                            navController.navigate(StockDetailsRoute(symbol = symbol))
+                        }
+                    )
+                    stockDetailsRoute()
                 }
             }
         }

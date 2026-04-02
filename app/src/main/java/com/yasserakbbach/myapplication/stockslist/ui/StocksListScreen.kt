@@ -112,11 +112,11 @@ private fun StocksListScreenPreview() {
     StocksListScreen(
         state = StocksListState(
             stocksList = listOf(
-                Stock(symbol = "NVDA", openPrice = 10.0, currentPrice = 11.0, change = 0.0, changePercent = 1.0),
-                Stock(symbol = "GOOGL", openPrice = 20.0, currentPrice = 12.0, change = 0.0, changePercent = 2.0),
-                Stock(symbol = "AAPL", openPrice = 30.0, currentPrice = 13.0, change = 0.0, changePercent = 3.0),
-                Stock(symbol = "MSFT", openPrice = 40.0, currentPrice = 14.0, change = 0.0, changePercent = 4.0),
-                Stock(symbol = "AMZN", openPrice = 50.0, currentPrice = 15.0, change = 0.0, changePercent = 5.0),
+                Stock(symbol = "NVDA", openPrice = 10.0, change = 11.0, changePercent = 1.0),
+                Stock(symbol = "GOOGL", openPrice = 20.0, change = 12.0, changePercent = 2.0),
+                Stock(symbol = "AAPL", openPrice = 30.0, change = 13.0, changePercent = 3.0),
+                Stock(symbol = "MSFT", openPrice = 40.0, change = 14.0, changePercent = 4.0),
+                Stock(symbol = "AMZN", openPrice = 50.0, change = 15.0, changePercent = 5.0),
             ),
         ),
         event = { },
