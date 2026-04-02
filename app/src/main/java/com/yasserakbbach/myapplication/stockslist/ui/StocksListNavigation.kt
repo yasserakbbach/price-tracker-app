@@ -18,6 +18,7 @@ fun NavGraphBuilder.stocksListRoute() {
         StocksListScreen(state = state) { event ->
             when (event) {
                 is StocksListEvent.OnStockClick -> Unit // TODO navigate to stock details
+                is StocksListEvent.OnToggleConnectivity -> viewModel.toggleConnectivity(event.isConnected)
             }
         }
     }

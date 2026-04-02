@@ -44,3 +44,9 @@ val StockChangeStyle = TextStyle(
     fontWeight = FontWeight.Bold,
     fontSize = 12.sp,
 )
+
+val ConnectivityStatusStyle = TextStyle(
+    fontFamily = FontFamily.SansSerif,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 14.sp,
+)

@@ -1,5 +1,8 @@
 package com.yasserakbbach.myapplication.stockslist.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Stock(
     val symbol: String,
     val openPrice: Double,
