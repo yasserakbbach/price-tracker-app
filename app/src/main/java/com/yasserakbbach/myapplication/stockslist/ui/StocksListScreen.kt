@@ -19,6 +19,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,8 @@ fun StocksListScreen(
                             )
                         }
                         Switch(
-                            modifier = Modifier.align(Alignment.CenterEnd),
+                            modifier = Modifier.align(Alignment.CenterEnd)
+                                .testTag("ToggleConnectivitySwitch"),
                             checked = state.isOnline,
                             onCheckedChange = { event(StocksListEvent.OnToggleConnectivity(isConnected = it)) }
                         )
@@ -88,7 +90,7 @@ fun StocksListScreen(
                             style = Typography.bodyLarge,
                         )
                         if (state.isLoading) {
-                            LinearProgressIndicator()
+                            LinearProgressIndicator(modifier = Modifier.testTag("StocksLoadingIndicator"))
                         }
                     }
                 }

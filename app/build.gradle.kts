@@ -71,4 +71,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
 }
