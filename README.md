@@ -11,7 +11,8 @@
 - **Tested & Reliable:** Confirmed behavior backed by Compose UI and Unit tests.
 
 # Demo
-https://github.com/user-attachments/assets/d44ba19f-c721-4ee2-8a28-a321614979e4
+https://github.com/user-attachments/assets/f1877647-2cc8-487c-899c-a5c27fc30ea0
+
 
 # Demo deeplink - `stocks://symbol/{symbol}`
 https://github.com/user-attachments/assets/2e1a66c4-87f6-46f1-b388-9e8592cfa80d
