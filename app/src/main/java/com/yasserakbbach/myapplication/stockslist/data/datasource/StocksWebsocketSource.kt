@@ -5,16 +5,15 @@ import com.yasserakbbach.myapplication.stockslist.data.di.ApplicationScope
 import com.yasserakbbach.myapplication.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.myapplication.stockslist.domain.model.Stock
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -41,6 +40,8 @@ class StocksWebsocketSource @Inject constructor(
 
     private val _stocks = MutableStateFlow(fakeStocksDataSource.stocks)
     val stocks = _stocks.asStateFlow()
+
+    private var feedJob: Job? = null
 
     fun connect() {
         val request = Request.Builder()
@@ -80,8 +81,9 @@ class StocksWebsocketSource @Inject constructor(
     }
 
     private fun startFeed() {
-        scope.launch {
-            while (true) {
+        feedJob?.cancel()
+        feedJob = scope.launch {
+            while (isActive) {
                 delay(FETCHING_DELAY)
                 val jsonStocksList = Json.encodeToString<List<Stock>>(fakeStocksDataSource.stocks)
                 sendMessage(message = jsonStocksList)
@@ -101,14 +103,14 @@ class StocksWebsocketSource @Inject constructor(
     }
 
     fun disconnect() {
+        feedJob?.cancel()
+        feedJob = null
         webSocket?.close(1000, "User disconnected")
         _event.trySend(SocketStatus.Disconnected)
         webSocket = null
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun findStockBySymbol(symbol: String): Flow<Stock?> =
-        stocks.flatMapConcat { it.asFlow() }
-            .filter { stock -> stock.symbol == symbol }
+        stocks.map { list -> list.find { it.symbol == symbol } }
 
 }

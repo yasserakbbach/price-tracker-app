@@ -17,6 +17,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -29,6 +30,7 @@ import com.yasserakbbach.myapplication.ui.theme.ConnectedColor
 import com.yasserakbbach.myapplication.ui.theme.ConnectivityStatusStyle
 import com.yasserakbbach.myapplication.ui.theme.DisconnectedColor
 import com.yasserakbbach.myapplication.ui.theme.Typography
+import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +80,7 @@ fun StocksListScreen(
                 modifier = Modifier.padding(paddingValues)
                     .padding(16.dp)
             ) {
-                item {
+                item(key = "header") {
                     Row (
                         modifier = Modifier.padding(bottom = 8.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -94,16 +96,20 @@ fun StocksListScreen(
                         }
                     }
                 }
-                items(state.stocksList) { stock ->
+                items(
+                    items = state.stocksList,
+                    key = { stock -> stock.symbol },
+                    contentType = { "stock_item" },
+                ) { stock ->
+                    val onStockClick: (Stock) -> Unit = remember(stock.symbol) {
+                        { _ -> event(StocksListEvent.OnStockClick(stock)) }
+                    }
                     StockItem(
                         stock = stock,
-                        onClick = { event(StocksListEvent.OnStockClick(stock)) },
+                        onClick = onStockClick,
                     )
                 }
             }
-        },
-        bottomBar = {
-
         },
     )
 }
@@ -113,7 +119,7 @@ fun StocksListScreen(
 private fun StocksListScreenPreview() {
     StocksListScreen(
         state = StocksListState(
-            stocksList = listOf(
+            stocksList = persistentListOf(
                 Stock(symbol = "NVDA", openPrice = 10.0, change = 11.0, changePercent = 1.0),
                 Stock(symbol = "GOOGL", openPrice = 20.0, change = 12.0, changePercent = 2.0),
                 Stock(symbol = "AAPL", openPrice = 30.0, change = 13.0, changePercent = 3.0),

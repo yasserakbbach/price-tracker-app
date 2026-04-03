@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yasserakbbach.myapplication.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.myapplication.stockslist.domain.repository.StocksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -35,7 +36,7 @@ class StocksListViewModel @Inject constructor(
         viewModelScope.launch {
             stocksRepository.getAvailableStocks().collect { stocks ->
                 _state.update {
-                    it.copy(stocksList = stocks.sortedByDescending { stock -> stock.change })
+                    it.copy(stocksList = stocks.sortedByDescending { stock -> stock.change }.toImmutableList())
                 }
             }
         }

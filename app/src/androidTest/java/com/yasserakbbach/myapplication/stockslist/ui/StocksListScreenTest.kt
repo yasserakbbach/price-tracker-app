@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yasserakbbach.myapplication.stockslist.domain.model.Stock
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -22,14 +23,14 @@ class StocksListScreenTest {
     val composeTestRule = createComposeRule()
 
     // Dummy data for testing
-    private val testStocks = listOf(
+    private val testStocks = persistentListOf(
         Stock(symbol = "AAPL", openPrice = 150.0, change = 1.5, changePercent = 1.0),
         Stock(symbol = "GOOGL", openPrice = 2800.0, change = -12.0, changePercent = -0.4)
     )
 
     @Test
     fun displays_online_status_when_state_is_online() {
-        val state = StocksListState(isOnline = true, stocksList = emptyList())
+        val state = StocksListState(isOnline = true, stocksList = persistentListOf())
 
         composeTestRule.setContent {
             StocksListScreen(state = state, event = {})
@@ -46,7 +47,7 @@ class StocksListScreenTest {
 
     @Test
     fun displays_offline_status_when_state_is_offline() {
-        val state = StocksListState(isOnline = false, stocksList = emptyList())
+        val state = StocksListState(isOnline = false, stocksList = persistentListOf())
 
         composeTestRule.setContent {
             StocksListScreen(state = state, event = {})
@@ -62,7 +63,7 @@ class StocksListScreenTest {
 
     @Test
     fun displays_loading_indicator_when_loading_is_true() {
-        val state = StocksListState(isLoading = true, stocksList = emptyList())
+        val state = StocksListState(isLoading = true, stocksList = persistentListOf())
 
         composeTestRule.setContent {
             StocksListScreen(state = state, event = {})
@@ -91,7 +92,7 @@ class StocksListScreenTest {
     @Test
     fun toggling_switch_triggers_connectivity_event() {
         var capturedEvent: StocksListEvent? = null
-        val state = StocksListState(isOnline = true, stocksList = emptyList())
+        val state = StocksListState(isOnline = true, stocksList = persistentListOf())
 
         composeTestRule.setContent {
             StocksListScreen(
