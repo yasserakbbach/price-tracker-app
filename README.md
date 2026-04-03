@@ -1,7 +1,14 @@
 # price-tracker-app
 
 # Description
-Simple Price Tracker App built fully with Android, Kotlin, and Jetpack Compose on the UI side.
+**PriceTrackerApp** is a sleek, responsive Android application built to track live stock prices in real-time. Developed leveraging modern Android standards with Kotlin and Jetpack Compose, the project emphasizes a smooth user experience and maintainable architecture.
+
+**Key Features:**
+- **Real-Time Data:** Live-updating stock list powered by `WebSockets`.
+- **Modern UI:** Built entirely using Jetpack Compose with optimized lists (`LazyColumn`).
+- **Resilient State Management:** Smooth handling of loading and error states on detailed stock screens.
+- **Deep Linking:** Open directly to specific stocks using `stocks://symbol/{symbol}`.
+- **Tested & Reliable:** Confirmed behavior backed by Compose UI and Unit tests.
 
 # Demo
 https://github.com/user-attachments/assets/d44ba19f-c721-4ee2-8a28-a321614979e4

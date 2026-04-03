@@ -35,7 +35,7 @@ class StocksWebsocketSource @Inject constructor(
     @ApplicationScope private val scope: CoroutineScope,
 ) {
     private var webSocket: WebSocket? = null
-    private val _event = Channel<SocketStatus>()
+    private val _event = Channel<SocketStatus>(Channel.BUFFERED)
     val event = _event.receiveAsFlow()
 
     private val _stocks = MutableStateFlow(fakeStocksDataSource.stocks)
@@ -56,7 +56,12 @@ class StocksWebsocketSource @Inject constructor(
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 Log.d(TAG, "onMessage: text = $text")
-                _event.trySend(SocketStatus.Message(payload = text))
+                try {
+                    val decodedStockJsonList = Json.decodeFromString<List<Stock>>(text)
+                    _stocks.value = decodedStockJsonList
+                } catch (e: Exception) {
+                    _event.trySend(SocketStatus.Error(throwable = e))
+                }
             }
 
             override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -94,9 +99,7 @@ class StocksWebsocketSource @Inject constructor(
     private fun sendMessage(message: String) {
         val isSent = webSocket?.send(message) ?: false
         if (isSent) {
-            Log.d(TAG, "Sent: $message")
-            val decodedStockJsonList = Json.decodeFromString<List<Stock>>(message)
-            _stocks.value = decodedStockJsonList
+            Log.d(TAG, "Sent raw update ping.")
         } else {
             _event.trySend(SocketStatus.Error(throwable = Exception("Failed to send message")))
         }
