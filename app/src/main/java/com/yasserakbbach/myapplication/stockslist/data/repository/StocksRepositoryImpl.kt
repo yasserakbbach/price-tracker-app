@@ -11,10 +11,6 @@ class StocksRepositoryImpl @Inject constructor(
     private val stocksWebsocketSource: StocksWebsocketSource,
 ) : StocksRepository {
 
-    init {
-        stocksWebsocketSource.connect()
-    }
-
     override val socketStatus: Flow<SocketStatus>
         get() = stocksWebsocketSource.event
 
@@ -22,7 +18,7 @@ class StocksRepositoryImpl @Inject constructor(
         return stocksWebsocketSource.stocks
     }
 
-    override fun startFeed() {
+    override suspend fun startFeed() {
         stocksWebsocketSource.connect()
     }
 

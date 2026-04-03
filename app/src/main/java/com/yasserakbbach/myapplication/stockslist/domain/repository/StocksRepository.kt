@@ -8,7 +8,7 @@ interface StocksRepository {
     val socketStatus: Flow<SocketStatus>
     fun getAvailableStocks(): Flow<List<Stock>>
 
-    fun startFeed()
+    suspend fun startFeed()
     fun stopFeed()
     fun findStockBySymbol(symbol: String): Flow<Stock?>
 }

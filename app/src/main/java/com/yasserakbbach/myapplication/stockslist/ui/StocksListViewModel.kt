@@ -40,13 +40,17 @@ class StocksListViewModel @Inject constructor(
                 }
             }
         }
-        stocksRepository.startFeed()
+        viewModelScope.launch {
+            stocksRepository.startFeed()
+        }
     }
     fun toggleConnectivity(isConnected: Boolean) {
-        if (isConnected) {
-            stocksRepository.startFeed()
-        } else {
-            stocksRepository.stopFeed()
+        viewModelScope.launch {
+            if (isConnected) {
+                stocksRepository.startFeed()
+            } else {
+                stocksRepository.stopFeed()
+            }
         }
     }
 }

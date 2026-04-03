@@ -1,12 +1,11 @@
 package com.yasserakbbach.myapplication.stockslist.data.datasource
 
 import android.util.Log
-import com.yasserakbbach.myapplication.stockslist.data.di.ApplicationScope
 import com.yasserakbbach.myapplication.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.myapplication.stockslist.domain.model.Stock
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +31,6 @@ private const val FETCHING_DELAY = 2_000L
 class StocksWebsocketSource @Inject constructor(
     private val client: OkHttpClient,
     private val fakeStocksDataSource: FakeStocksDataSource,
-    @ApplicationScope private val scope: CoroutineScope,
 ) {
     private var webSocket: WebSocket? = null
     private val _event = Channel<SocketStatus>(Channel.BUFFERED)
@@ -43,7 +41,7 @@ class StocksWebsocketSource @Inject constructor(
 
     private var feedJob: Job? = null
 
-    fun connect() {
+    suspend fun connect() {
         val request = Request.Builder()
             .url(WEBSOCKET_URL)
             .build()
@@ -85,9 +83,9 @@ class StocksWebsocketSource @Inject constructor(
         startFeed()
     }
 
-    private fun startFeed() {
+    private suspend fun startFeed() = coroutineScope {
         feedJob?.cancel()
-        feedJob = scope.launch {
+        feedJob = launch{
             while (isActive) {
                 delay(FETCHING_DELAY)
                 val jsonStocksList = Json.encodeToString<List<Stock>>(fakeStocksDataSource.stocks)
