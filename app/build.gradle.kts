@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.yasserakbbach.myapplication"
+    namespace = "com.yasserakbbach.pricetrackerapp"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -15,7 +15,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.yasserakbbach.myapplication"
+        applicationId = "com.yasserakbbach.pricetrackerapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
