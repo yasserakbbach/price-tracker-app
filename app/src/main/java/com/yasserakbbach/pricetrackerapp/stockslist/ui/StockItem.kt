@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,6 +54,9 @@ fun StockItem(
                 modifier = Modifier.padding(end = 16.dp)
                     .align(Alignment.CenterEnd),
             ) {
+                val formattedChange = remember(stock.change) {
+                    String.format(Locale.getDefault(), "%.2f", stock.change)
+                }
                 val color = if (stock.isIncreased) {
                     ConnectedColor
                 } else {
@@ -61,7 +65,7 @@ fun StockItem(
                 Text(
                     modifier = Modifier.background(color = Color.White, shape = CircleShape)
                         .padding(8.dp),
-                    text = String.format(Locale.getDefault(), "%.2f", stock.change),
+                    text = formattedChange,
                     style = StockChangeStyle.copy(
                         color = color,
                     ),

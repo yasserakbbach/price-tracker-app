@@ -6,8 +6,11 @@ import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.repository.StocksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,11 +37,12 @@ class StocksListViewModel @Inject constructor(
             }
         }
         viewModelScope.launch {
-            stocksRepository.getAvailableStocks().collect { stocks ->
-                _state.update {
-                    it.copy(stocksList = stocks.sortedByDescending { stock -> stock.change }.toImmutableList())
+            stocksRepository.getAvailableStocks()
+                .map { stocks -> stocks.sortedByDescending { it.change }.toImmutableList()  }
+                .flowOn(Dispatchers.Default)
+                .collect { sortedStocks ->
+                    _state.update { it.copy(stocksList = sortedStocks) }
                 }
-            }
         }
         viewModelScope.launch {
             stocksRepository.startFeed()

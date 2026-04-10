@@ -101,7 +101,7 @@ fun StocksListScreen(
                     key = { stock -> stock.symbol },
                     contentType = { "stock_item" },
                 ) { stock ->
-                    val onStockClick: (Stock) -> Unit = remember(stock.symbol) {
+                    val onStockClick: (Stock) -> Unit = remember(stock.symbol, event) {
                         { _ -> event(StocksListEvent.OnStockClick(stock)) }
                     }
                     StockItem(
