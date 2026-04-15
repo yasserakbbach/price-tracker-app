@@ -11,8 +11,11 @@
 - **Tested & Reliable:** Confirmed behavior backed by Compose UI and Unit tests.
 
 # Demo
+## Light mode
 https://github.com/user-attachments/assets/f1877647-2cc8-487c-899c-a5c27fc30ea0
 
+## Dark mode
+https://github.com/user-attachments/assets/5e81894e-0244-46ee-afea-d66c596d55af
 
 # Demo deeplink - `stocks://symbol/{symbol}`
 https://github.com/user-attachments/assets/2e1a66c4-87f6-46f1-b388-9e8592cfa80d
