@@ -11,22 +11,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yasserakbbach.pricetrackerapp.R
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.Stock
-import com.yasserakbbach.pricetrackerapp.ui.theme.ConnectedColor
-import com.yasserakbbach.pricetrackerapp.ui.theme.DisconnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockChangeStyle
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockSymbolStyle
+import com.yasserakbbach.pricetrackerapp.ui.theme.connectedColor
+import com.yasserakbbach.pricetrackerapp.ui.theme.disconnectedColor
 import java.util.Locale
 
 @Composable
@@ -57,12 +57,15 @@ fun StockItem(
                 val formattedChange = remember(stock.change) {
                     String.format(Locale.getDefault(), "%.2f", stock.change)
                 }
-                val color = remember(stock.change) {
-                    if (stock.isIncreased) ConnectedColor else DisconnectedColor
+                val connected = connectedColor
+                val disconnected = disconnectedColor
+                val color = remember(stock.change, connected, disconnected) {
+                    if (stock.isIncreased) connected else disconnected
                 }
+                val badgeBackground = MaterialTheme.colorScheme.surface
                 val textStyle = remember(color) { StockChangeStyle.copy(color = color) }
                 Text(
-                    modifier = Modifier.background(color = Color.White, shape = CircleShape)
+                    modifier = Modifier.background(color = badgeBackground, shape = CircleShape)
                         .padding(8.dp),
                     text = formattedChange,
                     style = textStyle,

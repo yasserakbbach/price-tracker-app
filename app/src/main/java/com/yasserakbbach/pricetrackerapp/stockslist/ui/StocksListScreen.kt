@@ -26,10 +26,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yasserakbbach.pricetrackerapp.R
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.Stock
-import com.yasserakbbach.pricetrackerapp.ui.theme.ConnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.ConnectivityStatusStyle
-import com.yasserakbbach.pricetrackerapp.ui.theme.DisconnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.Typography
+import com.yasserakbbach.pricetrackerapp.ui.theme.connectedColor
+import com.yasserakbbach.pricetrackerapp.ui.theme.disconnectedColor
 import kotlinx.collections.immutable.persistentListOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,10 +46,12 @@ fun StocksListScreen(
                         modifier = Modifier.fillMaxWidth()
                             .padding(horizontal = 12.dp),
                     ) {
+                        val connected = connectedColor
+                        val disconnected = disconnectedColor
                         val (color, text) = if (state.isOnline) {
-                            ConnectedColor to stringResource(id = R.string.connected)
+                            connected to stringResource(id = R.string.connected)
                         } else {
-                            DisconnectedColor to stringResource(id = R.string.disconnected)
+                            disconnected to stringResource(id = R.string.disconnected)
                         }
                         Row(
                             modifier = Modifier.align(Alignment.CenterStart),

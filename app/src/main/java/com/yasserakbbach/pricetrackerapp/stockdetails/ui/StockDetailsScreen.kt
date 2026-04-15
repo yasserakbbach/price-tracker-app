@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -27,10 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.yasserakbbach.pricetrackerapp.R
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.Stock
-import com.yasserakbbach.pricetrackerapp.ui.theme.ConnectedColor
-import com.yasserakbbach.pricetrackerapp.ui.theme.DisconnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockDescriptionStyle
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockSymbolStyle
+import com.yasserakbbach.pricetrackerapp.ui.theme.connectedColor
+import com.yasserakbbach.pricetrackerapp.ui.theme.disconnectedColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,12 +58,14 @@ private fun StockDetailsScreenContent(stock: Stock) {
                     .padding(16.dp)
                     .fillMaxWidth()
                     .fillMaxHeight(.5f)
-                    .background(color = Color.LightGray, shape = RoundedCornerShape(8.dp)),
+                    .background(color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(8.dp)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val color = remember(stock.change) {
-                    if (stock.isIncreased) ConnectedColor else DisconnectedColor
+                val connected = connectedColor
+                val disconnected = disconnectedColor
+                val color = remember(stock.change, connected, disconnected) {
+                    if (stock.isIncreased) connected else disconnected
                 }
                 val formattedChange = remember(stock.change) { "%.2f".format(stock.change) }
                 val formattedOpenPrice = remember(stock.openPrice) { "%.2f".format(stock.openPrice) }
@@ -98,12 +101,12 @@ private fun StockDetailsScreenContent(stock: Stock) {
     )
 }
 
-private val errorTextStyle = StockSymbolStyle.copy(color = DisconnectedColor)
 @Composable
 private fun StockDetailsScreenError() {
+    val errorTextStyle = StockSymbolStyle.copy(color = disconnectedColor)
     Column(
         modifier = Modifier.fillMaxSize()
-            .background(color = Color.White),
+            .background(color = MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -123,7 +126,7 @@ private fun StockDetailsScreenError() {
 private fun StockDetailsScreenLoading() {
     Column(
         modifier = Modifier.fillMaxSize()
-            .background(color = Color.White),
+            .background(color = MaterialTheme.colorScheme.background),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {

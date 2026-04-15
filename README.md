@@ -26,3 +26,4 @@ https://github.com/user-attachments/assets/2e1a66c4-87f6-46f1-b388-9e8592cfa80d
 - Compose UI tests or unit tests ✅
 - Deep link: `stocks://symbol/{symbol}` that opens the details screen ✅
 - Error and loading for stock details screen ✅
+- Dark mode support ✅
