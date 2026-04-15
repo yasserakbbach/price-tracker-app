@@ -3,13 +3,14 @@ package com.yasserakbbach.pricetrackerapp.stockslist.data.datasource
 import android.util.Log
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.SocketStatus
 import com.yasserakbbach.pricetrackerapp.stockslist.domain.model.Stock
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
@@ -36,8 +37,9 @@ class StocksWebsocketSource @Inject constructor(
     private val _event = Channel<SocketStatus>(Channel.BUFFERED)
     val event = _event.receiveAsFlow()
 
-    private val _stocks = MutableStateFlow(fakeStocksDataSource.stocks)
-    val stocks = _stocks.asStateFlow()
+    private val _stocksMap = MutableStateFlow(fakeStocksDataSource.stocks.associateBy { it.symbol })
+    val stocks = _stocksMap.map { it.values.toList() }
+        .flowOn(Dispatchers.IO)
 
     private var feedJob: Job? = null
 
@@ -56,7 +58,7 @@ class StocksWebsocketSource @Inject constructor(
                 Log.d(TAG, "onMessage: text = $text")
                 try {
                     val decodedStockJsonList = Json.decodeFromString<List<Stock>>(text)
-                    _stocks.value = decodedStockJsonList
+                    _stocksMap.value = decodedStockJsonList.associateBy { it.symbol }
                 } catch (e: Exception) {
                     _event.trySend(SocketStatus.Error(throwable = e))
                 }
@@ -112,6 +114,6 @@ class StocksWebsocketSource @Inject constructor(
     }
 
     fun findStockBySymbol(symbol: String): Flow<Stock?> =
-        stocks.map { list -> list.find { it.symbol == symbol } }
+        _stocksMap.map { it[symbol] }
 
 }

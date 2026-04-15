@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,7 +31,6 @@ import com.yasserakbbach.pricetrackerapp.ui.theme.ConnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.DisconnectedColor
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockDescriptionStyle
 import com.yasserakbbach.pricetrackerapp.ui.theme.StockSymbolStyle
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,15 +61,16 @@ private fun StockDetailsScreenContent(stock: Stock) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val color = if (stock.isIncreased) {
-                    ConnectedColor
-                } else {
-                    DisconnectedColor
+                val color = remember(stock.change) {
+                    if (stock.isIncreased) ConnectedColor else DisconnectedColor
                 }
+                val formattedChange = remember(stock.change) { "%.2f".format(stock.change) }
+                val formattedOpenPrice = remember(stock.openPrice) { "%.2f".format(stock.openPrice) }
+                val formattedChangePercent = remember(stock.changePercent) { "%.2f".format(stock.changePercent) }
 
                 Text(
                     modifier = Modifier.padding(bottom = 12.dp),
-                    text = "${String.format(Locale.getDefault(), "%.2f", stock.change)}$",
+                    text = "$formattedChange$",
                     style = StockSymbolStyle,
                 )
                 Icon(
@@ -87,8 +88,8 @@ private fun StockDetailsScreenContent(stock: Stock) {
                 Text(
                     modifier = Modifier.padding(top = 12.dp),
                     text = """
-                        This stock's opening price is ${String.format(Locale.getDefault(), "%.2f", stock.openPrice)}$
-                        and the percentage of its progress is ${String.format(Locale.getDefault(), "%.2f", stock.changePercent)}%
+                        This stock's opening price is $formattedOpenPrice$
+                        and the percentage of its progress is $formattedChangePercent%
                     """.trimIndent(),
                     style = StockDescriptionStyle,
                 )
@@ -97,6 +98,7 @@ private fun StockDetailsScreenContent(stock: Stock) {
     )
 }
 
+private val errorTextStyle = StockSymbolStyle.copy(color = DisconnectedColor)
 @Composable
 private fun StockDetailsScreenError() {
     Column(
@@ -112,7 +114,7 @@ private fun StockDetailsScreenError() {
         )
         Text(
             text = stringResource(id = R.string.error_loading_stock),
-            style = StockSymbolStyle.copy(color = DisconnectedColor),
+            style = errorTextStyle,
         )
     }
 }

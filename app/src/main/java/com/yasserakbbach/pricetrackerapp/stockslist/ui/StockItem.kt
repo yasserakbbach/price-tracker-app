@@ -57,18 +57,15 @@ fun StockItem(
                 val formattedChange = remember(stock.change) {
                     String.format(Locale.getDefault(), "%.2f", stock.change)
                 }
-                val color = if (stock.isIncreased) {
-                    ConnectedColor
-                } else {
-                    DisconnectedColor
+                val color = remember(stock.change) {
+                    if (stock.isIncreased) ConnectedColor else DisconnectedColor
                 }
+                val textStyle = remember(color) { StockChangeStyle.copy(color = color) }
                 Text(
                     modifier = Modifier.background(color = Color.White, shape = CircleShape)
                         .padding(8.dp),
                     text = formattedChange,
-                    style = StockChangeStyle.copy(
-                        color = color,
-                    ),
+                    style = textStyle,
                 )
                 Icon(
                     modifier = Modifier.size(24.dp),
